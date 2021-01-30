@@ -1,0 +1,27 @@
+{
+  "name": "@neupauer/tailwindcss-plugin-filter",
+  "version": "0.1.0",
+  "description": "A Tailwind CSS plugin for the filter and backdrop-filter properties.",
+  "main": "src/index.js",
+  "license": "MIT",
+  "repository": "https://github.com/neupauer/tailwindcss-plugin-filter",
+  "author": {
+    "name": "Peter Neupauer",
+    "url": "https://neupauer.sk"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "prettier": {
+    "printWidth": 120
+  },
+  "scripts": {
+    "prepublishOnly": "node scripts/build.js"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.2.0",
+    "clean-css": "^4.2.1",
+    "postcss": "^8.2.2",
+    "tailwindcss": "^2.0.2"
+  }
+}
