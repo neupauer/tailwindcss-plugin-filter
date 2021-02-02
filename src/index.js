@@ -24,12 +24,12 @@ const filterPlugin = plugin(
               "blur(var(--tw-filter-blur, 0))",
               "brightness(var(--tw-filter-brightness, 1))",
               "contrast(var(--tw-filter-contrast, 1))",
-              "drop-shadow(var(--tw-filter-drop-shadow, 0 0))",
               "grayscale(var(--tw-filter-grayscale, 0))",
               "hue-rotate(var(--tw-filter-hue-rotate, 0))",
               "invert(var(--tw-filter-invert, 0))",
               "saturate(var(--tw-filter-saturate, 1))",
               "sepia(var(--tw-filter-sepia, 0))",
+              "drop-shadow(var(--tw-filter-drop-shadow, 0 0))",
             ].join(" "),
           },
           ".filter": {
