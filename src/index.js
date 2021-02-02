@@ -1,5 +1,7 @@
 const plugin = require("tailwindcss/plugin");
 
+const camelize = (s) => s.replace(/-./g, (x) => x.toUpperCase()[1]);
+
 const interpolationFunctions = [
   "blur",
   "brightness",
@@ -8,76 +10,74 @@ const interpolationFunctions = [
   "grayscale",
   "hue-rotate",
   "invert",
-  "opacity",
   "saturate",
   "sepia",
 ];
-
-const interpolationFunctionsPublicApiNames = {
-  opacity: "filter-opacity",
-};
-
-const getPublicApiName = (key) => interpolationFunctionsPublicApiNames[key] || key;
 
 const filterPlugin = plugin(
   function ({ addUtilities, theme, variants, e }) {
     addUtilities(
       [
         {
-          ".filter, .backdrop": {
-            ...interpolationFunctions.reduce((acc, interpolationFunction) => {
-              acc[`--tw-filter-${interpolationFunction}`] = "var(--tw-empty, /*!*/ /*!*/)";
-              return acc;
-            }, {}),
+          ".filter,.backdrop": {
+            "--tw-filter-functions": [
+              "blur(var(--tw-filter-blur, 0))",
+              "brightness(var(--tw-filter-brightness, 1))",
+              "contrast(var(--tw-filter-contrast, 1))",
+              "drop-shadow(var(--tw-filter-drop-shadow, 0 0))",
+              "grayscale(var(--tw-filter-grayscale, 0))",
+              "hue-rotate(var(--tw-filter-hue-rotate, 0))",
+              "invert(var(--tw-filter-invert, 0))",
+              "saturate(var(--tw-filter-saturate, 1))",
+              "sepia(var(--tw-filter-sepia, 0))",
+            ].join(" "),
           },
           ".filter": {
-            filter: interpolationFunctions
-              .map((interpolationFunction) => `var(--tw-filter-${interpolationFunction})`)
-              .join(" "),
+            filter: "var(--tw-filter-functions)",
           },
           ".backdrop": {
-            backdropFilter: interpolationFunctions
-              .map((interpolationFunction) => `var(--tw-filter-${interpolationFunction})`)
-              .join(" "),
+            backdropFilter: "var(--tw-filter-functions)",
           },
-          ".no-filter": {
+          ".filter-none": {
             filter: "none",
           },
-          ".no-backdrop": {
+          ".backdrop-none": {
             backdropFilter: "none",
           },
         },
         ...interpolationFunctions.map((interpolationFunction) => {
-          const themeConfig = theme("filter") ? theme("filter")[interpolationFunction] || {} : {};
-          return Object.entries(themeConfig).map(([key, value]) => {
+          const themeFunctionConfig = theme("filterFunctions")
+            ? theme("filterFunctions")[camelize(interpolationFunction)] || {}
+            : {};
+
+          return Object.entries(themeFunctionConfig).map(([key, value]) => {
             return {
-              [`.${e(`${getPublicApiName(interpolationFunction)}-${key}`)}`]: {
-                [`--tw-filter-${interpolationFunction}`]: `${interpolationFunction}(${value})`,
+              [`.${e(`${interpolationFunction}-${key}`)}`]: {
+                [`--tw-filter-${interpolationFunction}`]: `${value}`,
               },
             };
           });
         }),
       ],
-      variants("filter")
+      variants("filterFunctions")
     );
   },
   {
     theme: {
-      filter: {
+      filterFunctions: {
         blur: {},
         brightness: {},
         contrast: {},
-        "drop-shadow": {},
+        dropShadow: {},
         grayscale: {},
-        "hue-rotate": {},
+        hueRotate: {},
         invert: {},
-        opacity: {},
         saturate: {},
         sepia: {},
       },
     },
     variants: {
-      filter: ["responsive", "hover"],
+      filterFunctions: ["responsive", "hover"],
     },
   }
 );

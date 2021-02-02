@@ -1,15 +1,17 @@
 # Tailwind CSS Plugin – Filter & Backdrop Filter
 
+Utilities for controlling filter & backdrop-filter behaviour.
+
 ## Install
 
 1. Install the plugin:
 
 ```bash
 # Using npm
-npm install @neupauer/tailwindcss-plugin-filter --save-dev
+npm install @neupauer/tailwindcss-plugin-filter
 
 # Using Yarn
-yarn add @neupauer/tailwindcss-plugin-filter -D
+yarn add @neupauer/tailwindcss-plugin-filter
 ```
 
 2. Add it to your `tailwind.config.js` file:
@@ -29,56 +31,83 @@ module.exports = {
 module.exports = {
   theme: {
     // default
-    filter: {
+    filterFunctions: {
       blur: {},
       brightness: {},
       contrast: {},
-      "drop-shadow": {},
+      dropShadow: {},
       grayscale: {},
-      "hue-rotate": {},
+      hueRotate: {},
       invert: {},
-      opacity: {},
       saturate: {},
       sepia: {},
     },
   },
   variants: {
     // default
-    filter: ["responsive", "hover"],
+    filterFunctions: ["responsive", "hover"],
   },
 };
 ```
 
 ## Usage
 
+### Filter & Backdrop Filter
+
+To enable filters you have to add the `.filter` or `.backdrop` utility. _(Similar to the native Tailwind `transform` utility)_
+
+### None
+
+If you want to disable filters, then you can use the `.filter-none` or `.backdrop-none` utility.
+
+### Responsive
+
+To enable or disable filters at a specific breakpoint, add a `{screen}:` prefix to any of the filter utilities. For example, use `md:filter` or `md:backdrop` to apply the `filter` or `backdrop` utility at only medium screen sizes and above.
+
+### Available Filter Functions
+
+> By default, no values are provided for any filter
+
+- `.blur-{value}`
+- `.brightness-{value}`
+- `.contrast-{value}`
+- `.drop-shadow-{value}`
+- `.grayscale-{value}`
+- `.hue-rotate-{value}`
+- `.invert-{value}`
+- `.saturate-{value}`
+- `.sepia-{value}`
+
+> Utility for **filter: opacity()** or **backdrop-filter: opacity()** is not provided because [according to MDN](<https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/opacity()>) this function is similar to the more established **opacity** property. The difference is that with filters, some browsers provide hardware acceleration for better performance.
+>
+> So, you can use [Tailwind's native `opacity` utility](https://tailwindcss.com/docs/opacity).
+
+### Example Usage
+
 ```js
 // tailwind.config.js
 module.exports = {
   theme: {
-    filter: {
+    filterFunctions: {
       blur: {
+        1: "1px",
         2: "2px",
+        3: "3px",
       },
       saturate: {
         40: "40%",
-      },
-      opacity: {
-        20: "20%",
       },
     },
   },
 };
 ```
 
-> All filters have equivalent class name except `opacity`.
-> `.opacity-{x}` => `.filter-opacity-{x}`
-
 ```html
-<!-- backdrop-filter: blur(2px) saturate(40%); -->
-<div class="backdrop blur-2 saturate-40"></div>
-
 <!-- filter: blur(2px) saturate(40%); -->
 <div class="filter blur-2 saturate-40"></div>
+
+<!-- backdrop-filter: blur(2px) saturate(40%); -->
+<div class="backdrop blur-2 saturate-40"></div>
 
 <!--
   filter: blur(2px) saturate(40%);
@@ -86,12 +115,9 @@ module.exports = {
 -->
 <div class="filter backdrop blur-2 saturate-40"></div>
 
-<!-- backdrop-filter: none; -->
-<div class="no-backdrop"></div>
-
 <!-- filter: none; -->
-<div class="no-filter"></div>
+<div class="filter-none"></div>
 
-<!-- backdrop-filter: opacity(20%); -->
-<div class="backdrop filter-opacity-20"></div>
+<!-- backdrop-filter: none; -->
+<div class="backdrop-none"></div>
 ```

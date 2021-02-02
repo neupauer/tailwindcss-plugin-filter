@@ -7,11 +7,10 @@ const interpolationFunctions = [
   "blur",
   "brightness",
   "contrast",
-  "drop-shadow",
+  "dropShadow",
   "grayscale",
-  "hue-rotate",
+  "hueRotate",
   "invert",
-  "opacity",
   "saturate",
   "sepia",
 ];
@@ -22,14 +21,12 @@ function buildDistFile(filename) {
       corePlugins: false,
       plugins: [require("../src/index.js")],
       theme: {
-        filter: {
-          ...interpolationFunctions.reduce((acc, interpolationFunction) => {
-            acc[interpolationFunction] = {
+        filterFunctions: {
+          ...interpolationFunctions.reduce((accumulator, interpolationFunction) => {
+            accumulator[interpolationFunction] = {
               1: "1",
-              2: "2",
-              3: "3",
             };
-            return acc;
+            return accumulator;
           }, {}),
         },
       },
@@ -56,6 +53,6 @@ function buildDistFile(filename) {
 
 console.info("Building CSS...");
 
-Promise.all([buildDistFile("filter")]).then(() => {
+Promise.all([buildDistFile("dist")]).then(() => {
   console.log("Finished building CSS.");
 });
